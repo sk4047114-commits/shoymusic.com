@@ -1,5 +1,6 @@
 import React from 'react';
 import { Instagram, Facebook, Youtube, Music2, ArrowUp, Phone } from 'lucide-react';
+import { SOCIAL_LINKS } from '../constants';
 
 export default function Footer() {
   const scrollToTop = () => {
@@ -17,7 +18,7 @@ export default function Footer() {
             </p>
             <div className="flex flex-wrap gap-4">
               <a 
-                href="https://www.instagram.com/Shoy_khan" 
+                href={SOCIAL_LINKS.instagram} 
                 target="_blank" 
                 rel="noopener noreferrer"
                 className="p-2 hover:text-brand transition-colors"
@@ -46,7 +47,14 @@ export default function Footer() {
               >
                 <Phone size={20} />
               </a>
-              <a href="#" className="p-2 hover:text-brand transition-colors"><Music2 size={20} /></a>
+              <a 
+                href={SOCIAL_LINKS.spotify} 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="p-2 hover:text-brand transition-colors"
+              >
+                <Music2 size={20} />
+              </a>
             </div>
           </div>
 

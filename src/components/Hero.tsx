@@ -47,7 +47,10 @@ export default function Hero() {
           transition={{ delay: 0.7 }}
           className="flex flex-col md:flex-row items-center justify-center gap-6"
         >
-          <button className="group flex items-center gap-3 px-8 py-4 bg-white text-black font-bold rounded-full hover:bg-brand transition-all duration-300">
+          <button 
+            onClick={() => document.getElementById('music')?.scrollIntoView({ behavior: 'smooth' })}
+            className="group flex items-center gap-3 px-8 py-4 bg-white text-black font-bold rounded-full hover:bg-brand transition-all duration-300"
+          >
             LATEST RELEASE
             <Play size={18} className="fill-current" />
           </button>

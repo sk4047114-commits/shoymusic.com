@@ -1,6 +1,7 @@
 import React from 'react';
 import { motion } from 'motion/react';
 import { Download, Play, Send, FileText, Music } from 'lucide-react';
+import { EPK_URL, DEMO_MIX_URL } from '../constants';
 
 export default function BookingEPK() {
   const [formStatus, setFormStatus] = React.useState<'idle' | 'sending' | 'sent'>('idle');
@@ -10,6 +11,18 @@ export default function BookingEPK() {
     setFormStatus('sending');
     // Simulate API call
     setTimeout(() => setFormStatus('sent'), 1500);
+  };
+
+  const handleDownloadEPK = () => {
+    if (EPK_URL === '#') {
+      alert('EPK file link not configured. Please provide your EPK link in constants.ts');
+      return;
+    }
+    window.open(EPK_URL, '_blank');
+  };
+
+  const handlePlayDemo = () => {
+    window.open(DEMO_MIX_URL, '_blank');
   };
 
   return (
@@ -35,6 +48,7 @@ export default function BookingEPK() {
                 Everything you need for promotion, including high-res photos, technical rider, and bio.
               </p>
               <motion.button
+                onClick={handleDownloadEPK}
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
                 className="flex items-center gap-3 px-8 py-4 bg-white text-black font-bold rounded-full hover:bg-brand transition-all duration-300"
@@ -50,7 +64,10 @@ export default function BookingEPK() {
                 Latest Demo Mix
               </div>
               {/* SoundCloud Embed Placeholder */}
-              <div className="w-full aspect-[16/9] bg-surface rounded-2xl overflow-hidden border border-white/5 relative group">
+              <div 
+                onClick={handlePlayDemo}
+                className="w-full aspect-[16/9] bg-surface rounded-2xl overflow-hidden border border-white/5 relative group cursor-pointer"
+              >
                 <div className="absolute inset-0 flex items-center justify-center bg-black/40 group-hover:bg-black/20 transition-colors">
                   <Play size={48} className="text-brand fill-current" />
                 </div>

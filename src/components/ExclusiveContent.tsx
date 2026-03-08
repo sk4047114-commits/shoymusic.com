@@ -1,7 +1,7 @@
 import React from 'react';
 import { motion } from 'motion/react';
 import { Lock, Play, Download, ExternalLink } from 'lucide-react';
-import { TRACKS } from '../constants';
+import { TRACKS, SOCIAL_LINKS, SPOTIFY_CONFIG } from '../constants';
 
 export default function ExclusiveContent() {
   const [playingTrack, setPlayingTrack] = React.useState<string | null>(null);
@@ -64,6 +64,21 @@ export default function ExclusiveContent() {
     }
   };
 
+  const handleSpotifyAuth = () => {
+    if (!SPOTIFY_CONFIG.clientId) {
+      // If no client ID, just link to the artist profile as a fallback
+      window.open(SOCIAL_LINKS.spotify, '_blank');
+      return;
+    }
+
+    const authUrl = `https://accounts.spotify.com/authorize?client_id=${SPOTIFY_CONFIG.clientId}&response_type=token&redirect_uri=${encodeURIComponent(SPOTIFY_CONFIG.redirectUri)}&scope=${encodeURIComponent(SPOTIFY_CONFIG.scopes)}`;
+    window.location.href = authUrl;
+  };
+
+  const handleAppleMusic = () => {
+    window.open(SOCIAL_LINKS.appleMusic, '_blank');
+  };
+
   const handleSeek = (e: React.ChangeEvent<HTMLInputElement>) => {
     const time = parseFloat(e.target.value);
     if (audioRef.current) {
@@ -107,7 +122,10 @@ export default function ExclusiveContent() {
             <h2 className="text-4xl md:text-6xl font-serif italic font-bold mb-4">The Vault</h2>
             <p className="text-white/50 font-mono text-sm tracking-widest uppercase">Exclusive Music & Early Access</p>
           </div>
-          <button className="px-6 py-2 border border-brand text-brand font-mono text-xs tracking-widest hover:bg-brand hover:text-black transition-all">
+          <button 
+            onClick={() => document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' })}
+            className="px-6 py-2 border border-brand text-brand font-mono text-xs tracking-widest hover:bg-brand hover:text-black transition-all"
+          >
             JOIN INNER CIRCLE
           </button>
         </div>
@@ -267,10 +285,16 @@ export default function ExclusiveContent() {
                 <h4 className="text-xl font-bold mb-2">Unlock the Full Catalog</h4>
                 <p className="text-white/60 text-sm mb-6">Get access to unreleased demos, stems, and high-fidelity vinyl masters.</p>
                 <div className="flex flex-col gap-3">
-                  <button className="w-full py-4 bg-white text-black font-bold rounded-sm hover:bg-brand transition-colors flex items-center justify-center gap-2">
+                  <button 
+                    onClick={handleSpotifyAuth}
+                    className="w-full py-4 bg-white text-black font-bold rounded-sm hover:bg-brand transition-colors flex items-center justify-center gap-2"
+                  >
                     AUTHENTICATE WITH SPOTIFY
                   </button>
-                  <button className="w-full py-4 border border-white/20 text-white font-bold rounded-sm hover:bg-white hover:text-black transition-colors flex items-center justify-center gap-2">
+                  <button 
+                    onClick={handleAppleMusic}
+                    className="w-full py-4 border border-white/20 text-white font-bold rounded-sm hover:bg-white hover:text-black transition-colors flex items-center justify-center gap-2"
+                  >
                     LISTEN ON APPLE MUSIC
                   </button>
                 </div>

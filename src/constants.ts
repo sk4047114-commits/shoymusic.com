@@ -94,3 +94,25 @@ export const TOUR_DATES: TourDate[] = [
   { id: '2', date: 'MAR 22', venue: 'BERGHAIN', location: 'BERLIN, DE', status: 'sold-out' },
   { id: '3', date: 'APR 05', venue: 'TIME WARP', location: 'MANNHEIM, DE', status: 'exclusive' },
 ];
+
+export const SOCIAL_LINKS = {
+  spotify: 'https://open.spotify.com/artist/shoy', // Placeholder - user should update
+  appleMusic: 'https://music.apple.com/artist/shoy', // Placeholder - user should update
+  instagram: 'https://instagram.com/shoymusic',
+  soundcloud: 'https://soundcloud.com/shoymusic',
+  twitter: 'https://twitter.com/shoymusic'
+};
+
+export const SPOTIFY_CONFIG = {
+  clientId: process.env.VITE_SPOTIFY_CLIENT_ID || '',
+  redirectUri: `${typeof window !== 'undefined' ? window.location.origin : ''}/callback`,
+  scopes: [
+    'user-read-private',
+    'user-read-email',
+    'user-follow-read',
+    'playlist-modify-public'
+  ].join(' ')
+};
+
+export const EPK_URL = '#'; // User should update with their actual EPK link (e.g., Google Drive or Dropbox)
+export const DEMO_MIX_URL = 'https://soundcloud.com/shoymusic'; // User should update with their actual SoundCloud mix link
