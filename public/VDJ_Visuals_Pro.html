@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SHOY // PRO VDJ VISUALS</title>
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            background-color: #000;
+        }
+        canvas {
+            display: block;
+        }
+        #overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            background: repeating-linear-gradient(
+                0deg,
+                rgba(0, 0, 0, 0.15),
+                rgba(0, 0, 0, 0.15) 1px,
+                transparent 1px,
+                transparent 2px
+            );
+            z-index: 10;
+        }
+    </style>
+</head>
+<body>
+    <div id="overlay"></div>
+    <canvas id="canvas"></canvas>
+
+    <script>
+        const canvas = document.getElementById('canvas');
+        const ctx = canvas.getContext('2d');
+
+        let width, height;
+        let time = 0;
+
+        function resize() {
+            width = canvas.width = window.innerWidth;
+            height = canvas.height = window.innerHeight;
+        }
+
+        window.addEventListener('resize', resize);
+        resize();
+
+        function drawOrganicGrid(t) {
+            ctx.strokeStyle = '#00FF00';
+            ctx.lineWidth = 1;
+            
+            const rows = 20;
+            const cols = 20;
+            const cellW = width / cols;
+            const cellH = height / rows;
+
+            for (let i = 0; i <= cols; i++) {
+                ctx.beginPath();
+                ctx.globalAlpha = 0.1 + Math.sin(t + i * 0.5) * 0.05;
+                for (let j = 0; j <= rows; j++) {
+                    const x = i * cellW + Math.sin(t * 2 + j * 0.2) * 30;
+                    const y = j * cellH;
+                    if (j === 0) ctx.moveTo(x, y);
+                    else ctx.lineTo(x, y);
+                }
+                ctx.stroke();
+            }
+
+            for (let j = 0; j <= rows; j++) {
+                ctx.beginPath();
+                ctx.globalAlpha = 0.1 + Math.cos(t + j * 0.5) * 0.05;
+                for (let i = 0; i <= cols; i++) {
+                    const x = i * cellW;
+                    const y = j * cellH + Math.cos(t * 2 + i * 0.2) * 30;
+                    if (i === 0) ctx.moveTo(x, y);
+                    else ctx.lineTo(x, y);
+                }
+                ctx.stroke();
+            }
+        }
+
+        function drawDataStream(t) {
+            ctx.font = '10px "JetBrains Mono", monospace';
+            ctx.fillStyle = '#00FF00';
+            
+            for (let i = 0; i < 10; i++) {
+                const x = (Math.sin(t + i) * 0.5 + 0.5) * width;
+                const y = (t * 200 + i * 100) % height;
+                ctx.globalAlpha = 0.3;
+                ctx.fillText('SHOY_SYSTEM_DATA_STREAM_' + Math.floor(Math.random() * 1000), x, y);
+            }
+        }
+
+        function drawCentralCore(t) {
+            const centerX = width / 2;
+            const centerY = height / 2;
+            const radius = 150 + Math.sin(t * 5) * 20;
+
+            ctx.save();
+            ctx.translate(centerX, centerY);
+            ctx.rotate(t);
+
+            // Outer Ring
+            ctx.strokeStyle = '#00FF00';
+            ctx.lineWidth = 2;
+            ctx.globalAlpha = 0.8;
+            ctx.beginPath();
+            ctx.arc(0, 0, radius, 0, Math.PI * 2);
+            ctx.stroke();
+
+            // Inner Pulsing Hexagon
+            ctx.beginPath();
+            for (let i = 0; i < 6; i++) {
+                const angle = (i / 6) * Math.PI * 2;
+                const r = radius * 0.6 + Math.sin(t * 10) * 10;
+                const x = Math.cos(angle) * r;
+                const y = Math.sin(angle) * r;
+                if (i === 0) ctx.moveTo(x, y);
+                else ctx.lineTo(x, y);
+            }
+            ctx.closePath();
+            ctx.stroke();
+
+            ctx.restore();
+        }
+
+        function animate() {
+            time += 0.01;
+
+            // Background Fade
+            ctx.fillStyle = 'rgba(0, 0, 0, 0.15)';
+            ctx.fillRect(0, 0, width, height);
+
+            // Glitch Burst
+            if (Math.random() > 0.97) {
+                ctx.fillStyle = '#00FF00';
+                ctx.globalAlpha = 0.05;
+                ctx.fillRect(0, 0, width, height);
+            }
+
+            drawOrganicGrid(time);
+            drawDataStream(time);
+            drawCentralCore(time);
+
+            // Chromatic Aberration Simulation
+            if (Math.random() > 0.9) {
+                ctx.save();
+                ctx.globalCompositeOperation = 'screen';
+                ctx.translate(Math.random() * 4 - 2, 0);
+                ctx.restore();
+            }
+
+            requestAnimationFrame(animate);
+        }
+
+        animate();
+    </script>
+</body>
+</html>

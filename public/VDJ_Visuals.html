@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SHOY // VDJ VISUALS</title>
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            background-color: #050505;
+        }
+        canvas {
+            display: block;
+        }
+        #ui {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            color: #00FF00;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 10px;
+            letter-spacing: 2px;
+            pointer-events: none;
+            text-transform: uppercase;
+            opacity: 0.5;
+        }
+    </style>
+</head>
+<body>
+    <div id="ui">SHOY // VDJ_SYSTEM_V1.0 // ACTIVE</div>
+    <canvas id="canvas"></canvas>
+
+    <script>
+        const canvas = document.getElementById('canvas');
+        const ctx = canvas.getContext('2d');
+
+        let width, height;
+        let particles = [];
+        const particleCount = 100;
+        const brandColor = '#00FF00';
+
+        function resize() {
+            width = canvas.width = window.innerWidth;
+            height = canvas.height = window.innerHeight;
+        }
+
+        window.addEventListener('resize', resize);
+        resize();
+
+        class Particle {
+            constructor() {
+                this.init();
+            }
+
+            init() {
+                this.x = Math.random() * width;
+                this.y = Math.random() * height;
+                this.vx = (Math.random() - 0.5) * 2;
+                this.vy = (Math.random() - 0.5) * 2;
+                this.size = Math.random() * 2 + 1;
+                this.life = Math.random() * 0.5 + 0.5;
+            }
+
+            update() {
+                this.x += this.vx;
+                this.y += this.vy;
+
+                if (this.x < 0 || this.x > width) this.vx *= -1;
+                if (this.y < 0 || this.y > height) this.vy *= -1;
+            }
+
+            draw() {
+                ctx.fillStyle = brandColor;
+                ctx.globalAlpha = this.life * 0.5;
+                ctx.fillRect(this.x, this.y, this.size, this.size);
+            }
+        }
+
+        for (let i = 0; i < particleCount; i++) {
+            particles.push(new Particle());
+        }
+
+        function drawGrid() {
+            ctx.strokeStyle = brandColor;
+            ctx.lineWidth = 0.5;
+            ctx.globalAlpha = 0.1;
+
+            const spacing = 50;
+            const time = Date.now() * 0.001;
+
+            for (let x = 0; x < width; x += spacing) {
+                ctx.beginPath();
+                ctx.moveTo(x, 0);
+                ctx.lineTo(x + Math.sin(time + x * 0.01) * 20, height);
+                ctx.stroke();
+            }
+
+            for (let y = 0; y < height; y += spacing) {
+                ctx.beginPath();
+                ctx.moveTo(0, y);
+                ctx.lineTo(width, y + Math.cos(time + y * 0.01) * 20);
+                ctx.stroke();
+            }
+        }
+
+        function animate() {
+            // Glitch effect
+            if (Math.random() > 0.98) {
+                ctx.fillStyle = brandColor;
+                ctx.globalAlpha = 0.1;
+                ctx.fillRect(0, Math.random() * height, width, Math.random() * 50);
+            }
+
+            ctx.fillStyle = 'rgba(5, 5, 5, 0.1)';
+            ctx.fillRect(0, 0, width, height);
+
+            drawGrid();
+
+            particles.forEach(p => {
+                p.update();
+                p.draw();
+            });
+
+            // Scanline effect
+            ctx.fillStyle = 'rgba(0, 255, 0, 0.02)';
+            for (let i = 0; i < height; i += 4) {
+                ctx.fillRect(0, i, width, 1);
+            }
+
+            requestAnimationFrame(animate);
+        }
+
+        animate();
+    </script>
+</body>
+</html>
